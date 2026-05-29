@@ -1,4 +1,7 @@
 
+using MediBook.API.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace MediBook.API
 {
     public class Program
@@ -6,6 +9,10 @@ namespace MediBook.API
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            // Database
+            builder.Services.AddDbContext<AppDbContext>(options =>
+               options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             // Add services to the container.
 
