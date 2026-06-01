@@ -1,0 +1,50 @@
+<section id="doctors" class="py-5 bg-white">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-5 flex-wrap">
+      <h2 class="fw-bold">Our Professional Doctors</h2>
+      <select class="form-select w-auto shadow-sm" (change)="filterDoctors($event)">
+        <option value="all">All Specialties</option>
+        <option value="General">General</option>
+        <option value="Cardiology">Cardiology</option>
+        <option value="Pediatrics">Pediatrics</option>
+        <option value="Dermatology">Dermatology</option>
+        <option value="Neurology">Neurology</option>
+        <option value="Orthopedics">Orthopedics</option>
+      </select>
+    </div>
+
+    @if (isLoading) {
+      <div class="d-flex justify-content-center align-items-center py-5">
+        <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <h5 class="ms-3 text-muted mb-0">Loading...</h5>
+      </div>
+    } @else {
+      <div class="row g-4">
+        @for (doc of doctors; track doc.id) {
+          <div class="col-md-6 col-lg-3">
+            <div class="card h-100 shadow-sm border-0">
+              <img
+                [src]="doc.imageUrl || 'https://cdn-icons-png.flaticon.com/512/387/387561.png'"
+                class="card-img-top"
+                [alt]="doc.name"
+                style="height: 250px; object-fit: cover"
+                (error)="doc.imageUrl = 'https://cdn-icons-png.flaticon.com/512/387/387561.png'"
+              />
+              <div class="card-body text-center">
+                <h5 class="card-title fw-bold">{{ doc.name }}</h5>
+                <p class="card-text text-primary">{{ doc.specialty }}</p>
+                <a href="#booking" class="btn btn-sm btn-outline-primary">Select Doctor</a>
+              </div>
+            </div>
+          </div>
+        } @empty {
+          <div class="col-12">
+            <div class="alert alert-info text-center mb-0">No doctors found</div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</section>
