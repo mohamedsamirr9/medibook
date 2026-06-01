@@ -1,5 +1,7 @@
 
 using MediBook.API.Data;
+using MediBook.API.Repositories;
+using MediBook.API.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace MediBook.API
@@ -15,11 +17,35 @@ namespace MediBook.API
                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             // Add services to the container.
+            // Register Repositories
+            builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
+            builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+
+            // Register Services
+            builder.Services.AddScoped<IDoctorService, DoctorService>();
+            builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            // CORS
+            var allowedOrigins = builder.Configuration
+                .GetSection("AllowedOrigins")
+                .Get<string[]>();
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", policy =>
+                {
+                    policy.WithOrigins(allowedOrigins!)
+                          .AllowAnyMethod()
+                          .AllowAnyHeader()
+                          .AllowCredentials()
+                          .WithExposedHeaders("access_token");
+                });
+            });
 
             var app = builder.Build();
 
@@ -31,6 +57,8 @@ namespace MediBook.API
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("AllowAll");
 
             app.UseAuthorization();
 
