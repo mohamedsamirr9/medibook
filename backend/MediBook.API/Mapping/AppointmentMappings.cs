@@ -5,7 +5,7 @@ namespace MediBook.API.Mapping
 {
     public static class AppointmentMappings
     {
-        public static AppointmentResponseDto ToDto(this Appointment appointment, int queueNumber)
+        public static AppointmentResponseDto ToDto(this Appointment appointment)
         {
             return new AppointmentResponseDto
             {
@@ -15,7 +15,7 @@ namespace MediBook.API.Mapping
                 Specialty = appointment.Doctor?.Specialty ?? "Not Found",
                 AppointmentDate = appointment.AppointmentDate,
                 QueueNumber = appointment.QueueNumber,
-                EstimatedWaitMinutes = (queueNumber - 1) * 15
+                EstimatedWaitMinutes = (appointment.QueueNumber - 1) * 15
             };
         }
         public static Appointment ToEntity(this CreateAppointmentDto dto)

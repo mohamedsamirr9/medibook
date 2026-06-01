@@ -36,8 +36,12 @@ namespace MediBook.API.Data
                 entity.Property(a => a.Notes).HasMaxLength(1000);
                 entity.Property(a => a.QueueNumber).HasDefaultValue(0);
             });
+
+            // Seed Data 
+            modelBuilder.SeedData();
+
         }
-       
+
 
     }
 }
